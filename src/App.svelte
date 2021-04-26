@@ -1,12 +1,14 @@
 <script>
     var pokeNumber = Math.floor(Math.random() * 899);
     var pokeURL = "https://pokeapi.co/api/v2/pokemon/" + pokeNumber;
-    var pokeGenerationURL = "https://pokeapi.co/api/v2/pokemon-species/" + pokeNumber;
+    var pokeGenerationURL =
+        "https://pokeapi.co/api/v2/pokemon-species/" + pokeNumber;
     let currentPokemon = {};
     let pokeImage;
     let pokeTypes = [];
     let pokeID;
     let pokeGeneration;
+    let pokeSprite;
 
     //turns numbers 1 to 899 into 001...079..898
     let threeDigits = function (myNumber) {
@@ -35,22 +37,22 @@
                 currentPokemon.sprites.other["official-artwork"].front_default;
             pokeTypes = Object.values(currentPokemon.types);
             pokeID = threeDigits(currentPokemon.id);
+            pokeSprite = currentPokemon.sprites.front_default;
 
             console.log(currentPokemon);
 
             // fetch pokémon generation
-            return fetch(pokeGenerationURL)
+            return fetch(pokeGenerationURL);
         })
         .then((response) => {
             return response.json();
         })
         .then((json) => {
             console.log(json.generation.name);
-            return pokeGeneration = json.generation.name.toUpperCase();
+            return (pokeGeneration = json.generation.name.toUpperCase());
         });
 
     //pokemon generation fetch
- 
 
     // fake poke api fetch (returns only bulbasaur)
 
@@ -71,29 +73,34 @@
 </script>
 
 <main>
-    <h1>
-        {currentPokemon.name} <span class="light">#{pokeID}</span>
-    </h1>
-    <h4>{pokeGeneration}</h4>
-    <div class="pokewrapper">
-        <div class="pokedex-left">
-            <img src={pokeImage} alt="" height="475" width="475" />
-        </div>
-        <div class="pokedex-right">
-            {#each pokeTypes as type}
-                <div class="poketype-card">
-                    <div class="background-color-{type.type.name}-div">
-                        <img
-                            src="./img/{type.type.name}.svg"
-                            alt=""
-                            class="poketype"
-                        />
+    <section>
+        <h1>
+            {currentPokemon.name} <span class="light">#{pokeID}</span>
+        </h1>
+        <h4>{pokeGeneration}</h4>
+        <div class="pokewrapper">
+            <div class="pokedex-left">
+                <img src={pokeImage} alt="" height="475" width="475" />
+            </div>
+            <div class="pokedex-right">
+                {#each pokeTypes as type}
+                    <div class="poketype-card">
+                        <div class="background-color-{type.type.name}-div">
+                            <img
+                                src="./img/{type.type.name}.svg"
+                                alt=""
+                                class="poketype"
+                                height="60px"
+                            />
+                        </div>
+                        <p class="poketype-text">{type.type.name}</p>
                     </div>
-                    <p class="poketype-text">{type.type.name}</p>
-                </div>
-            {/each}
+                {/each}
+
+                <img src={pokeSprite} alt="" />
+            </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <svelte:head>
@@ -150,6 +157,13 @@
         }
     }
 
+    section {
+        background-color: #fafafa;
+        width: 800px;
+        border-radius: 10%;
+        padding: 50px 0px;
+    }
+
     .poketype {
         width: 50px;
         &-text {
@@ -166,15 +180,20 @@
         display: flex;
         justify-content: center;
         align-items: flex-start;
+        margin-top: 50px;
     }
 
     main {
         text-align: center;
-        padding: 1em;
+        padding: 0;
         max-width: 240px;
         margin: 0 auto;
         font-family: "Orbitron";
         animation: fadeInTop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
 
     h1 {
@@ -184,7 +203,6 @@
         font-weight: 900;
         font-family: "Orbitron";
         margin: 0;
-        margin-top: 100px;
     }
 
     h4 {
