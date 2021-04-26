@@ -164,6 +164,12 @@
         padding: 50px 0px;
     }
 
+    .pokedex {
+        &-right {
+            padding: 30px;
+        }
+    }
+
     .poketype {
         width: 50px;
         &-text {
